@@ -16,18 +16,18 @@ const Sidebar = () => {
                 <h3>Currículo</h3>
                 <ul>
                     <li>
-                        <NavLink to="/curriculo/cadastro/resumo" className={styles.active}>
-                            Cadastrar Resumo
+                        <NavLink to="/curriculo/informacoes/cadastro" className={styles.active}>
+                            Cadastrar Informações
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/curriculo/cadastro/experiencia-academica" className={styles.active}>
-                            Cadastrar Experiência Acadêmica
+                        <NavLink to="/curriculo/experiencia/cadastro" className={styles.active}>
+                            Cadastrar Experiência
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/curriculo/cadastro/experiencia-profissional" className={styles.active}>
-                            Cadastrar Experiência Profissional
+                        <NavLink to="/curriculo/experiencia/lista" className={styles.active}>
+                            Lista de Experiências
                         </NavLink>
                     </li>
                 </ul>
@@ -40,8 +40,8 @@ const Sidebar = () => {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/portfolio/listagem" className={styles.active}>
-                            Listagem de Portfólio
+                        <NavLink to="/portfolio/lista" className={styles.active}>
+                            Lista de Portfólio
                         </NavLink>
                     </li>
                 </ul>
