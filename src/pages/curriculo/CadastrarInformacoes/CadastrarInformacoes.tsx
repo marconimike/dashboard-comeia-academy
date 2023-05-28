@@ -47,7 +47,7 @@ const CadastrarInformacoes: React.FC = () => {
                 {({errors, touched}) => (
                     <Form action="" className={styles.form}>
 
-                        <h2 className={styles.formGroup}>Cadastrar Infromações</h2>
+                        <h2 className={styles.formGroup}>Cadastrar Informações</h2>
 
                         <Input
                             label="Foto"
