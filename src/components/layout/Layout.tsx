@@ -20,7 +20,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <Sidebar />
                <div className={styles.content}>{children}</div> 
             </div>
-            <Footer/>
+            <Footer/> 
         </div>
     );
 };

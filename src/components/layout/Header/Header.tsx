@@ -6,7 +6,7 @@ const Header: React.FC = () => {
     return(
         <header className={styles.header}>
             <div className={styles.logo}>
-                <h2>Dashboard do meu sistema</h2>
+                <h2>Bijuido</h2>
             </div>
         </header>
     );

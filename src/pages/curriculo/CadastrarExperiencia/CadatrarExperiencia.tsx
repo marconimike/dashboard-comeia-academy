@@ -3,23 +3,24 @@ import React from "react";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./CadastrarExperiencia.module.css";
 import Input from "../../../components/forms/Input";
 import Textarea from "../../../components/forms/Textarea";
 import Select from "../../../components/forms/Select";
+import { Experiencia, createOrUpdateExperiencia } from "../../../services/experoenciasService";
 
 
-interface FormValues {
-    titulo: string;
-    descricao: string;
-    tipo: string;
-    anoInicio: string;
-    anoFim: string;
-}
 
 const CadastrarExperiencia: React.FC = () => {
 
-    const initialValues: FormValues = {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const experiencia = location.state as Experiencia;
+
+    const initialValues: Experiencia = {
+        id: 0,
         titulo: "",
         descricao:"",
         tipo:"",
@@ -29,23 +30,31 @@ const CadastrarExperiencia: React.FC = () => {
 
     const validationSchema = Yup.object().shape({
         titulo: Yup.string().required("Campo obrigatório"),
-        descricao: Yup.string().required("Campo obrigatório"),
+        descricao: Yup.string(),
         tipo: Yup.string().required("Campo obrigatório"),
         anoInicio: Yup.number().required("Campo obrigatório").typeError("Um numero é Obrigatório"),
         anoFim: Yup.number().required("Campo obrigatório").typeError("Um numero é Obrigatório"),
     });
 
-    const onSubmit = (values: FormValues, {resetForm}: {resetForm: () => void }
+    const onSubmit = async (values: Experiencia, {resetForm}: {resetForm: () => void }
     ) => {
-        console.log(values);
-        resetForm();
-        alert("Formulario enviado com Sucesso!");
+        try {
+            await createOrUpdateExperiencia(values);
+            console.log(values);
+            resetForm();
+            navigate("/curriculo/experiencia/lista");
+            alert("Formulario enviado com Sucesso!");
+        } catch (error) {
+            console.log(error);
+            alert("Ocorreu um erro ao enviar o formulário");
+        }
+        
     };
 
     return (
         <div className={styles.formWrapper}>
             <Formik 
-                initialValues={initialValues}
+                initialValues={experiencia || initialValues}
                 validationSchema={validationSchema}
                 onSubmit={onSubmit}
             >
@@ -88,7 +97,7 @@ const CadastrarExperiencia: React.FC = () => {
                             errors={errors.descricao}
                             touched={touched.descricao}
                         />
-                        <button type="submit" className={styles.button}>Cadastrar</button>
+                        <button type="submit" className={styles.button}>Salvar</button>
                     </Form>
                 )}
             </Formik>

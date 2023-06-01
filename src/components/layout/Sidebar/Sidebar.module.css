@@ -15,10 +15,6 @@
     margin-bottom: 1rem;
 }
 
-.navigation h3 {
-    color: #333;
-}
-
 .navigation li:last-child {
     margin-bottom: 0;
 }

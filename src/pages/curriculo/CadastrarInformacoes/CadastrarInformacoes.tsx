@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -7,16 +7,16 @@ import Input from "../../../components/forms/Input";
 import Textarea from "../../../components/forms/Textarea";
 
 import styles from "./CadastrarInformacoes.module.css"
+import { Informacoes, getInformacoes, updateInformacoes } from "../../../services/informacoesService";
+import InformacoesCard from "./InformacoesCard";
 
-interface FormValues {
-    foto: string;
-    nome: string;
-    cargo: string;
-    resumo:string;
-}
+
 const CadastrarInformacoes: React.FC = () => {
+
+    const [informacoes, setInformacoes] = useState<Informacoes>({} as Informacoes);
     
-    const initialValues: FormValues = {
+    const initialValues: Informacoes = {
+        id: 1,
         foto: '',
         nome: '',
         cargo: '',
@@ -30,17 +30,49 @@ const CadastrarInformacoes: React.FC = () => {
         resumo: Yup.string().required('Campo obrigatorio'),
     });
 
-    const onSubmit = (values: FormValues, {resetForm}: { resetForm: () => void }) => {
-        console.log(values);
-        resetForm();
-        alert('Formulario enviado com sucesso!');
+    const fetchInformacao = async () => {
+        try {
+            const informacao = await getInformacoes();
+            setInformacoes(informacao);
+        } catch (error) {
+            console.error('Erro ao buscar informações:', error);
+        }
     };
+
+    useEffect(() => {
+        fetchInformacao();
+    }, []);
+
+    const onSubmit = async (values: Informacoes, {resetForm}: { resetForm: () => void }) => {
+        try {
+            await updateInformacoes(values);
+            setInformacoes(values);
+            console.log(values);
+            resetForm();
+            alert('Formulario enviado com sucesso!');
+        } catch (error) {
+            console.error('Erro ao enviar o formulário:', error);
+            alert('Ocorreu um erro ao enviar o formulário. Tente novamente.');
+
+        }
+    };
+
+    const handleDelete = async () => {
+        try{
+            await updateInformacoes(initialValues);
+            setInformacoes(initialValues);
+            alert('Informaões deletadas com sucesso!');
+        } catch {error} {
+            console.error('Erro ao deletar informaçoẽs', error);
+            alert('Ocorreu um erro ao deletar as informações. Tente novamente.');
+        }
+    }
     
     return (
         <div className={styles.formWrapper}>
 
             <Formik 
-                initialValues={initialValues}
+                initialValues={informacoes}
                 enableReinitialize={true}
                 validationSchema={validationSchema} 
                 onSubmit={onSubmit}>
@@ -82,6 +114,20 @@ const CadastrarInformacoes: React.FC = () => {
                     </Form>
                  )}  
             </Formik>
+
+            {informacoes &&
+                Object.entries(informacoes).some(
+                    ([key, value]) => key !== "id" && value.trim() !== ""
+                ) && (
+                    <div className={styles.cardContainer}>
+                        <InformacoesCard informacoes={informacoes} />
+
+                        <button type="button" onClick={handleDelete} className={`${styles.button} ${styles.deleteButton}`}> 
+                            Deletar
+                        </button>
+                    </div>
+                )}
+
         </div>
     );
 };
